@@ -41,18 +41,21 @@ namespace TextChanger
                 string content="";
                 try
                 {
-                    FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite);
-                    file.Close();
+                    using (FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite))
+                    { 
+                        using (StreamReader reader = new StreamReader(file))
+                            {
+                             content= reader.ReadToEnd();
+                            }
+                    }
+                    
                    /* // Open stream for reading file              
                     StreamReader reader = new StreamReader(Path);
                     // Reading file
                     string content = reader.ReadToEnd();
                     reader.Close();
                     * */
-                    using (StreamReader reader = new StreamReader(Path))
-                    {
-                         content= reader.ReadToEnd();
-                    }
+                   
                     // Counting matching in file
                     MatchCollection MatchesCount = RegText.Matches(content);
                     // Replacing %OldValue% to %NewValue%
