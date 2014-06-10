@@ -38,7 +38,7 @@ namespace TextChanger
 
             foreach (string Path in Pathes)
             {
-
+                string content="";
                 try
                 {
                     FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite);
@@ -51,7 +51,7 @@ namespace TextChanger
                     * */
                     using (StreamReader reader = new StreamReader(Path))
                     {
-                        string content = reader.ReadToEnd();
+                         content= reader.ReadToEnd();
                     }
                     // Counting matching in file
                     MatchCollection MatchesCount = RegText.Matches(content);
