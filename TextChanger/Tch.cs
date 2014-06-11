@@ -34,11 +34,12 @@ namespace TextChanger
             int SpecifiedFiles = Pathes.Length;
             int FoundFiles = SpecifiedFiles;
             int ProcessedFiles = 0;
-            //int i = 0;
+            string content="";
+            int i = 0;
 
             foreach (string Path in Pathes)
             {
-                string content="";
+                i++;
                 try
                 {
                     using (FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite))
@@ -48,14 +49,6 @@ namespace TextChanger
                              content= reader.ReadToEnd();
                             }
                     }
-                    
-                   /* // Open stream for reading file              
-                    StreamReader reader = new StreamReader(Path);
-                    // Reading file
-                    string content = reader.ReadToEnd();
-                    reader.Close();
-                    * */
-                   
                     // Counting matching in file
                     MatchCollection MatchesCount = RegText.Matches(content);
                     // Replacing %OldValue% to %NewValue%
@@ -67,29 +60,29 @@ namespace TextChanger
                         {
                             writer.Write(content);
                         }
-                        Console.WriteLine("{0}. File <{1}>: subtituted {2} entries.", Array.IndexOf(Pathes, Path) + 1, Path, MatchesCount.Count);
+                        Console.WriteLine("{0}. File <{1}>: subtituted {2} entries.", i, Path, MatchesCount.Count);
                         ProcessedFiles++;
                     }
                     else
                     {
-                        Console.WriteLine("{0}.File <{1}> no matches found.", Array.IndexOf(Pathes, Path) + 1, Path);
+                        Console.WriteLine("{0}.File <{1}> no matches found.", i, Path);
                     }
                 }
                     
                 catch (FileNotFoundException e)
                 {
-                    Console.WriteLine("{0}. File <{1}> not found", Array.IndexOf(Pathes, Path) + 1, Path);
+                    Console.WriteLine("{0}. File <{1}> not found", i, Path);
                     FoundFiles--;
                 }
 
                 catch (UnauthorizedAccessException e)
                 {
-                    Console.WriteLine("{0}. File <{1}> access denied. Please run programm as Administrator", Array.IndexOf(Pathes, Path) + 1, Path);
+                    Console.WriteLine("{0}. File <{1}> access denied. Please run programm as Administrator", i, Path);
                 }
 
                 catch (FileLoadException e)
                 {
-                    Console.WriteLine("{0}. File <{1}> access denied", Array.IndexOf(Pathes, Path) + 1, Path);
+                    Console.WriteLine("{0}. File <{1}> access denied", i, Path);
                 }
                 
             }
