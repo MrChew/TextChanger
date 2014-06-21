@@ -2,5 +2,7 @@
 в ReplaceTextInFile  - кол-во замен в указаном файле
 в ReplaceTextInFiles - кол-во обработанных файлов (в которых были сделаны замены)
 
+ReplaceTextInFile(string pattern, string newValue, string path)
+ReplaceTextInFiles(string pattern, string newValue, IEnumerable<string> path)
 
 IEnumerable ??????
