@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataReplace.cs" />
     <Compile Include="Tch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
