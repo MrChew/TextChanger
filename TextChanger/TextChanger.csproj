@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataReplace.cs" />
+    <Compile Include="ReplaceTextinFile.cs" />
+    <Compile Include="ReplaseTextinFiles.cs" />
     <Compile Include="Tch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
