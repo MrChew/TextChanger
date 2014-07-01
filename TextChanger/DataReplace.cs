@@ -13,11 +13,13 @@ namespace TextChanger
          private string _content="";
         private int _ProcessedFiles = 0;
         private int _FoundFiles=0;
+        private string _path = "";
 
 
         public int ReplaceTextInFile(string pattern, string newValue, string path)
         {
             Regex RegText = new Regex(pattern, RegexOptions.ExplicitCapture);
+            _path = path;
             try
             {
                 using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
@@ -45,27 +47,26 @@ namespace TextChanger
                 }
                 else
                 {
-                    Console.WriteLine("File <{0}> no matches found.",path);
                     return (0);
                 }
             }
 
             catch (FileNotFoundException e)
             {
-                Console.WriteLine("File <{0}> not found", path);
+                _ErrorLogger(1);
                 _FoundFiles++;
                 return (0);
             }
 
             catch (UnauthorizedAccessException e)
             {
-                Console.WriteLine("File <{0}> access denied. Please run programm as Administrator",path);
+                _ErrorLogger(2);
                 return (0);
             }
 
             catch (FileLoadException e)
             {
-                Console.WriteLine("File <{0}> access denied",path);
+                _ErrorLogger(3);
                 return (0);
             }
         }
@@ -83,6 +84,22 @@ namespace TextChanger
         public int ProcessedFiles()
         {
             return _ProcessedFiles;
+        }
+
+        private void _ErrorLogger(int i)
+        {
+            switch(i)
+            {
+                case 1:
+                    Console.WriteLine("File <{0}> not found", _path);
+                    break;
+                case 2:
+                    Console.WriteLine("File <{0}> access denied. Please run programm as Administrator",_path);   
+                    break;
+                case 3:
+                    Console.WriteLine("File <{0}> access denied", _path);
+                    break;
+            }
         }
     }
 }

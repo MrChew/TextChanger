@@ -33,7 +33,11 @@ namespace TextChanger
                 CountSubtitud = DR.ReplaceTextInFile(Pattern, NewValue, Path);
                 if (CountSubtitud != 0)
                 {
-                    Console.WriteLine("File <{0}>: subtituted {1} entries.",Path, CountSubtitud);
+                    Console.WriteLine("File <{0}>: subtituted {1} entries.", Path, CountSubtitud);
+                }
+                else
+                {
+                    Console.WriteLine("File <{0}>: no mathes found.", Path);
                 }
             }
             Console.WriteLine();
