@@ -1,105 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TextChanger
 {
     public class DataReplace
     {
-         private string _content="";
-        private int _ProcessedFiles = 0;
-        private int _FoundFiles=0;
-        private string _path = "";
+        private string _content;
+        private int _processedFiles;
+        private int _foundFiles;
+        private string[] _source;
+        int _countSubtitud;
 
-
+ 
         public int ReplaceTextInFile(string pattern, string newValue, string path)
         {
-            Regex RegText = new Regex(pattern, RegexOptions.ExplicitCapture);
-            _path = path;
+            Regex regText = new Regex(pattern, RegexOptions.ExplicitCapture);
             try
             {
-                using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                using (var file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
                 {
-                    using (StreamReader reader = new StreamReader(file))
+                    using (var reader = new StreamReader(file))
                     {
                         _content = reader.ReadToEnd();
                     }
                 }
                 // Counting matching in file
-                MatchCollection MatchesCount = RegText.Matches(_content);
+                MatchCollection matchesCount = regText.Matches(_content);
                 // Replacing %pattern% to %NewValue%
-                if (MatchesCount.Count != 0)
+                if (matchesCount.Count != 0)
                 {
-                    _content = RegText.Replace(_content, newValue);
+                    _content = regText.Replace(_content, newValue);
                     // Open stream for writing data into file
-                    using (StreamWriter writer = new StreamWriter(path))
+                    using (var writer = new StreamWriter(path))
                     {
                         writer.Write(_content);
                     }
-                    _ProcessedFiles++;
-                    return MatchesCount.Count;
-                    //Console.WriteLine("{0}. File <{1}>: subtituted {2} entries.", i, Path, MatchesCount.Count);
-                    //ProcessedFiles++;
+                    _processedFiles++;
+                    return matchesCount.Count;
                 }
-                else
-                {
-                    return (0);
-                }
+                return (0);
             }
 
             catch (FileNotFoundException e)
             {
-                _ErrorLogger(1);
-                _FoundFiles++;
+                Console.WriteLine(e.Message);
+                _foundFiles++;
                 return (0);
             }
 
             catch (UnauthorizedAccessException e)
             {
-                _ErrorLogger(2);
+                Console.WriteLine(e.Message);
                 return (0);
             }
 
             catch (FileLoadException e)
             {
-                _ErrorLogger(3);
+                Console.WriteLine(e.Message);
                 return (0);
             }
         }
 
-        public void Summary(int i)
+        public int ReplaceInFiles(string pattern, string newValue, string source)
         {
-        Console.WriteLine("Specified: {0} files; Found: {1} files; Processed: {2} files", i, _FoundFiles, _ProcessedFiles);
-        return;
-        }
-
-        public int FoundFiles()
-        {
-            return _FoundFiles;
-        }
-        public int ProcessedFiles()
-        {
-            return _ProcessedFiles;
-        }
-
-        private void _ErrorLogger(int i)
-        {
-            switch(i)
+            _source = source.Split(';');
+            
+            foreach (string path in _source)
             {
-                case 1:
-                    Console.WriteLine("File <{0}> not found", _path);
-                    break;
-                case 2:
-                    Console.WriteLine("File <{0}> access denied. Please run programm as Administrator",_path);   
-                    break;
-                case 3:
-                    Console.WriteLine("File <{0}> access denied", _path);
-                    break;
+                _countSubtitud=this.ReplaceTextInFile(pattern, newValue, path);
+            if (_countSubtitud != 0)
+               {
+                Console.WriteLine("File '{0}': subtituted {1} entries.", path, _countSubtitud);
+               }
+           }
+            for (int i=1; i<20; i++)
+            {
+            Console.Write("* ");
             }
+            Console.WriteLine();
+            Console.WriteLine("Specified: {0} files; Found: {1} files; Processed: {2} files", _source.Length, _foundFiles, _processedFiles);
+            return (_processedFiles);
         }
+
     }
 }
