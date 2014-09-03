@@ -1,0 +1,39 @@
+Программа
+
+ - загружает конфигурационный файл (формат ниже) (see standard App.config files)
+ - по конфигурационному файлу находит указанные файлы (то есть в конфиге задаются полные пути к файлам, которые надо обработать)
+ - заменяет в найденных файл все строки %old_value% на %new_value%
+ - логирует результат (пишет в консоль) для каждого файла. file <path_from_config>: substituted <n> entries | not found | access denied | any other erro message
+ - логирует общий итог: specified: <N_specified> files, found: <N_found> files, processed: <N_processed> files
+ 
+ пример команды запуска
+ 
+ super_program "1.3.3.3" "1.3.3.4"
+ super_program - твоя программа
+ "1.3.3.3" - строка %old_value%
+ "1.3.3.4" - строка %new_value%
+
+
+http://msdn.microsoft.com/ru-ru/library/system.configuration.configurationelement%28v=vs.110%29.aspx
+http://generally.wordpress.com/2007/09/27/using-appconfig-for-user-defined-runtime-parameters/
+http://codereview.stackexchange.com/questions/186/getting-setting-default-values-from-my-app-config
+http://codes.codedigest.com/FAQ/59-How-to-use-App-Config-%28Application-Configuration%29-in-Console-Application-or-Windows-Application-in-C---.aspx
+http://social.msdn.microsoft.com/Forums/en-US/9a8c9f5a-092e-4c4a-87bb-9f35d8f55da1/get-connection-string-from-appconfig-file?forum=adodotnetdataproviders
+http://www.codeproject.com/Tips/416198/How-to-get-Connection-String-from-App-Config-in-Cs
+http://www.cyberforum.ru/csharp-beginners/thread89513.html
+http://msdn.microsoft.com/ru-ru/library/ms254494%28v=vs.110%29.aspx
+http://generally.wordpress.com/2007/09/27/using-appconfig-for-user-defined-runtime-parameters/
+____________________________________________-
+v 2.0
+1. Выдели в DataReplace в отдельную функцию -  замена текста. 
+2. В функции ReplaceTextInFile - делаешь. Открыть + прочитать файл, вызвать функцию из пункта 1 + получить результат. Записать в файл.
+3. Написать юниттесты для 
+  а) функции замены текста
+  б) функции замены текста в файле
+  в) функции замены текста в файлах.
+
+Тест кейсы 
+1) полное отсутствие искомой строки
+2) присутствие строки
+[23:41:07 | Изменены 23:41:24] Alexander aka Uzzy: 3) присутствие в самом начале, присутствие в самом конце.  
+4) последовательное следование искомой строки. например 1.1.1.11.1.1.1 - ищем на замену 1.1.1.1
