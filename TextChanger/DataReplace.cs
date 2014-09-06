@@ -11,11 +11,11 @@ namespace TextChanger
         private int _foundFiles;
         private string[] _source;
         int _countSubtitud;
+        private MatchCollection _matchesCount = null;
 
- 
+  
         public int ReplaceTextInFile(string pattern, string newValue, string path)
         {
-            Regex regText = new Regex(pattern, RegexOptions.ExplicitCapture);
             try
             {
                 using (var file = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
@@ -24,22 +24,14 @@ namespace TextChanger
                     {
                         _content = reader.ReadToEnd();
                     }
-                }
-                // Counting matching in file
-                MatchCollection matchesCount = regText.Matches(_content);
-                // Replacing %pattern% to %NewValue%
-                if (matchesCount.Count != 0)
+                 }
+                _content=this.Textreplace(_content, pattern, newValue);
+                using (var writer = new StreamWriter(path))
                 {
-                    _content = regText.Replace(_content, newValue);
-                    // Open stream for writing data into file
-                    using (var writer = new StreamWriter(path))
-                    {
-                        writer.Write(_content);
-                    }
-                    _processedFiles++;
-                    return matchesCount.Count;
+                    writer.Write(_content);
                 }
-                return (0);
+                _processedFiles++;
+                return _matchesCount.Count;
             }
 
             catch (FileNotFoundException e)
@@ -83,5 +75,12 @@ namespace TextChanger
             return (_processedFiles);
         }
 
+        public string Textreplace(string data, string pattern, string newValue)
+        {
+            var regText = new Regex(pattern, RegexOptions.ExplicitCapture);
+            _matchesCount = regText.Matches(data);
+            return (regText.Replace(data, newValue));
+        }
+        
     }
 }
