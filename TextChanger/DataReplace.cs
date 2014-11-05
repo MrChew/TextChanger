@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace TextChanger
 {
@@ -9,8 +11,7 @@ namespace TextChanger
         private string _content;
         private int _processedFiles;
         private int _foundFiles;
-        private string[] _source;
-        int _countSubtitud;
+        int _countSubtitud=0;
         private MatchCollection _matchesCount = null;
 
   
@@ -54,11 +55,10 @@ namespace TextChanger
             }
         }
 
-        public int ReplaceInFiles(string pattern, string newValue, string source)
+        public int ReplaceInFiles(string pattern, string newValue, IEnumerable<string> source)
         {
-            _source = source.Split(';');
-            
-            foreach (string path in _source)
+           
+            foreach (string path in source)
             {
                 _countSubtitud=this.ReplaceTextInFile(pattern, newValue, path);
             if (_countSubtitud != 0)
@@ -67,11 +67,9 @@ namespace TextChanger
                }
            }
             for (int i=1; i<20; i++)
-            {
-            Console.Write("* ");
-            }
+                Console.Write("* ");
             Console.WriteLine();
-            Console.WriteLine("Specified: {0} files; Found: {1} files; Processed: {2} files", _source.Length, _foundFiles, _processedFiles);
+            Console.WriteLine("Specified: {0} files; Found: {1} files; Processed: {2} files", source.Count(), _foundFiles, _processedFiles);
             return (_processedFiles);
         }
 

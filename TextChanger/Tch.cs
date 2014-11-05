@@ -19,12 +19,10 @@ namespace TextChanger
            string pattern = args[0];
            string newValue = args[1];
 
-            //Reading pathes from app.config
-            string source = ConfigurationManager.AppSettings["Path"];
-           
+          
            //Create DataReplace object
            DataReplace dr = new DataReplace();
-           dr.ReplaceInFiles(pattern, newValue, source);
+           dr.ReplaceInFiles(pattern, newValue, ConfigurationManager.AppSettings["Path"].Split(';'));
            Console.WriteLine();
         }
     }
